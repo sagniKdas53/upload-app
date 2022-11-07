@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Files</title>
+    <style type="text/css">
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        div {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <form action="/files" enctype="multipart/form-data" method="post">
+            <h3>Select files:</h3>
+            <input type="file" id="filepicker" multiple>
+            <br><br>
+            <button>Upload</button>
+        </form>
+        <form action="/folder" enctype="multipart/form-data" method="post">
+            <h3>Select folder:</h3>
+            <input type="file" id="folderpicker" webkitdirectory mozdirectory />
+            <br><br>
+            <button>Upload</button>
+        </form>
+        <ul id="listing"></ul>
+    </div>
+    <script defer>
+        document.getElementById("filepicker").addEventListener("change", (event) => {
+            let output = document.getElementById("listing");
+            for (const file of event.target.files) {
+                let item = document.createElement("li");
+                item.textContent = file.name;
+                output.appendChild(item);
+            };
+        }, false);
+
+        document.getElementById("folderpicker").addEventListener("change", (event) => {
+            let output = document.getElementById("listing");
+            for (const file of event.target.files) {
+                let item = document.createElement("li");
+                item.textContent = file.webkitRelativePath;
+                output.appendChild(item);
+            };
+        }, false);
+    </script>
+</body>
+
+</html>
