@@ -5,14 +5,13 @@ const path = require('path');
 var port = process.argv[2] || 8888;
 
 const server = http.createServer((req, res) => {
+    let saved = '';
+    let filename = '';
     if (req.url === '/') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.write(fs.readFileSync(__dirname + '/index.html'));
         res.end();
     } else if (req.url === '/files') {
-        let saved = '';
-        let filename = '';
-       
         const bb = busboy({ headers: req.headers });
         bb.on('file', (name, file, info) => {
             filename = info.filename;
@@ -27,10 +26,7 @@ const server = http.createServer((req, res) => {
         });
         req.pipe(bb);
     } else if (req.url === '/folder') {
-        let saved = '';
-        let filename = '';
- 
-        const bb = busboy({ headers: req.headers });
+        const bb = busboy({ headers: req.headers, preservePath: true });
         bb.on('file', (name, file, info) => {
             filename = info.filename;
             console.log("Saved: " + filename);

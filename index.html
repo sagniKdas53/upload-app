@@ -32,13 +32,13 @@
     <div>
         <form action="/files" enctype="multipart/form-data" method="post">
             <h3>Select files:</h3>
-            <input type="file" id="filepicker" multiple>
+            <input type="file" id="filepicker" name="filename" multiple>
             <br><br>
             <button>Upload</button>
         </form>
         <form action="/folder" enctype="multipart/form-data" method="post">
             <h3>Select folder:</h3>
-            <input type="file" id="folderpicker" webkitdirectory mozdirectory />
+            <input type="file" id="folderpicker" name="filename" webkitdirectory mozdirectory />
             <br><br>
             <button>Upload</button>
         </form>
