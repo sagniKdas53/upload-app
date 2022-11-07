@@ -8,42 +8,41 @@ const server = http.createServer((req, res) => {
     let saved = '';
     let filename = '';
     if (req.url === '/') {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.write(fs.readFileSync(__dirname + '/index.html'));
         res.end();
     } else if (req.url === '/files') {
         const bb = busboy({ headers: req.headers });
         bb.on('file', (name, file, info) => {
-            filename = info.filename;
+            filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
             console.log("Saved: " + filename);
-            saved += "," + filename
+            saved += "<br>" + filename
             const saveTo = path.join(__dirname + "/recieved", filename);
             file.pipe(fs.createWriteStream(saveTo));
         });
         bb.on('close', () => {
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end(`upload success: ${saved.slice(1)}`);
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(`<h3>Upload success:</h3> ${saved}`);
         });
         req.pipe(bb);
     } else if (req.url === '/folder') {
         const bb = busboy({ headers: req.headers, preservePath: true });
         bb.on('file', (name, file, info) => {
-            filename = info.filename;
+            filename = decodeURIComponent(escape(info.filename));
             dirpath = __dirname + "/recieved/"
             dirpath += filename.slice(0, filename.lastIndexOf('/'));
             //console.log(dirpath);
             if (!fs.existsSync(dirpath)) {
                 fs.mkdirSync(dirpath, { recursive: true });
             }
-            //decodeURIComponent(escape(magles))  This is depricated but it's the easiet way to do it
             console.log("Saved: " + filename.slice(filename.lastIndexOf('/') + 1,));
-            saved += "," + filename
+            saved += "<br>" + filename
             const saveTo = path.join(__dirname + "/recieved", filename);
             file.pipe(fs.createWriteStream(saveTo));
         });
         bb.on('close', () => {
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end(`upload success: ${saved.slice(1)}`);
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(`<h3>Upload success:</h3> ${saved}`);
         });
         req.pipe(bb);
     }
