@@ -6,43 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Files</title>
-    <style type="text/css">
-        html {
-            width: 100%;
-            height: 100%;
-        }
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
+    <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            margin: 0;
         }
 
-        div {
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
+        .l-box {
+            padding: 0.5em;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        <form action="/files" enctype="multipart/form-data" method="post">
-            <h3>Select files:</h3>
-            <input type="file" id="filepicker" name="filename" multiple>
-            <br><br>
-            <button>Upload</button>
-        </form>
-        <form action="/folder" enctype="multipart/form-data" method="post">
-            <h3>Select folder:</h3>
-            <input type="file" id="folderpicker" name="filename" webkitdirectory mozdirectory />
-            <br><br>
-            <button>Upload</button>
-        </form>
-        <ul id="listing"></ul>
+    <div class="pure-g">
+        <div class="pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
+            <form action="/files" enctype="multipart/form-data" method="post" class="pure-form pure-form-aligned l-box">
+                <h3>Select files:</h3>
+                <input type="file" id="filepicker" name="filename" multiple>
+                <br><br>
+                <button>Upload</button>
+            </form>
+            <form action="/folder" enctype="multipart/form-data" method="post"
+                class="pure-form pure-form-aligned l-box">
+                <h3>Select folder:</h3>
+                <input type="file" id="folderpicker" name="filename" webkitdirectory mozdirectory />
+                <br><br>
+                <button>Upload</button>
+            </form>
+            <!--<div class="l-box">
+                <h4>Upload progress:</h4>
+                <progress id="file" value="0" max="100"> 0% </progress>
+            </div>-->
+        </div>
+        <div class="pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
+            <div class="l-box">
+                <h3>File to upload:</h3>
+                <ul id="listing"></ul>
+            </div>
+
+        </div>
     </div>
     <script defer>
         document.getElementById("filepicker").addEventListener("change", (event) => {

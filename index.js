@@ -15,10 +15,11 @@ const server = http.createServer((req, res) => {
         const bb = busboy({ headers: req.headers });
         bb.on('file', (name, file, info) => {
             filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
-            console.log("Saved: " + filename);
+            process.stdout.write("Saving: " + filename + "\t");
             saved += "<br>" + filename
             const saveTo = path.join(__dirname + "/recieved", filename);
-            file.pipe(fs.createWriteStream(saveTo));
+            file.pipe(fs.createWriteStream(saveTo)); // the file is getting piped into fs to be saved
+            process.stdout.write('✅\n');
         });
         bb.on('close', () => {
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
@@ -35,10 +36,11 @@ const server = http.createServer((req, res) => {
             if (!fs.existsSync(dirpath)) {
                 fs.mkdirSync(dirpath, { recursive: true });
             }
-            console.log("Saved: " + filename.slice(filename.lastIndexOf('/') + 1,));
+            process.stdout.write("Saving: " + filename.slice(filename.lastIndexOf('/') + 1,) + '\t');
             saved += "<br>" + filename
             const saveTo = path.join(__dirname + "/recieved", filename);
             file.pipe(fs.createWriteStream(saveTo));
+            process.stdout.write('✅\n');
         });
         bb.on('close', () => {
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
