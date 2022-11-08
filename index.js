@@ -17,8 +17,23 @@ const server = http.createServer((req, res) => {
             filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
             process.stdout.write("Saving: " + filename + "\t");
             saved += "<br>" + filename
-            const saveTo = path.join(__dirname + "/recieved", filename);
-            file.pipe(fs.createWriteStream(saveTo)); // the file is getting piped into fs to be saved
+            const saveTo = fs.createWriteStream(path.join(__dirname + "/recieved", filename));
+            let save = file.pipe(saveTo); // the file is getting piped into fs to be saved
+            var hold = 0;
+            var progress = setInterval(function () {
+                var wb = save.bytesWritten;
+                if (hold != wb) {
+                    hold = wb;
+                } else {
+                    clearInterval(progress);
+                    hold = 0;
+                }
+                console.dir(wb / (1024 ^ 2));
+                /* this is a temporary solution, find a way get the full file size
+                then calculate the percentage and post that to the progress bar on 
+                the client side also make it elegant*/
+            }, 500);
+            //save.addListener("progress", () => { console.log(save.bytesWritten / 1024) })
             process.stdout.write('✅\n');
         });
         bb.on('close', () => {
