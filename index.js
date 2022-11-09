@@ -7,11 +7,15 @@ var port = process.argv[2] || 8888;
 const server = http.createServer((req, res) => {
     let saved = '';
     let filename = '';
+    //console.log(req, res);
     if (req.url === '/') {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.write(fs.readFileSync(__dirname + '/index.html'));
         res.end();
     } else if (req.url === '/files') {
+        file_size = req.headers['content-length'] / (1024 ^ 2);
+        console.dir("Total file of content: " + file_size);
+        var total = 0;
         const bb = busboy({ headers: req.headers });
         bb.on('file', (name, file, info) => {
             filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
@@ -20,15 +24,18 @@ const server = http.createServer((req, res) => {
             const saveTo = fs.createWriteStream(path.join(__dirname + "/recieved", filename));
             let save = file.pipe(saveTo); // the file is getting piped into fs to be saved
             var hold = 0;
+
             var progress = setInterval(function () {
                 var wb = save.bytesWritten;
                 if (hold != wb) {
+                    total += save.bytesWritten - hold;
                     hold = wb;
                 } else {
                     clearInterval(progress);
                     hold = 0;
                 }
-                console.dir(wb / (1024 ^ 2));
+                console.dir("Current file written in KB: " + wb / (1024 ^ 2))
+                console.dir("Total written in: " + ((total / (1024 ^ 2)) / file_size) * 100);
                 /* this is a temporary solution, find a way get the full file size
                 then calculate the percentage and post that to the progress bar on 
                 the client side also make it elegant*/
