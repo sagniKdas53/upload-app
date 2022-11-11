@@ -19,7 +19,14 @@
             padding: 0.5em;
         }
     </style>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.3/build/cjs/index.min.js"></script>
+    <script>
+        var socket = io('http://localhost');
+        socket.on('connect', function(){
+        socket.on('event', function(data){});
+        socket.on('disconnect', function(){});
+      });
+    </script>
 
 <body>
     <div class="pure-g">
@@ -37,10 +44,10 @@
                 <br><br>
                 <button>Upload</button>
             </form>
-            <!--<div class="l-box">
+            <div class="l-box">
                 <h4>Upload progress:</h4>
-                <progress id="file" value="0" max="100"> 0% </progress>
-            </div>-->
+                <progress id="upstat" value="0" max="100"> 0% </progress>
+            </div>
         </div>
         <div class="pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
             <div class="l-box">
@@ -68,6 +75,8 @@
                 output.appendChild(item);
             };
         }, false);
+
+        const pbar = document.getElementById(upstat);
     </script>
 </body>
 
