@@ -3,17 +3,12 @@ const busboy = require('busboy');
 const fs = require('fs');
 const path = require('path');
 const cliProgress = require('cli-progress');
-const io = require('socket.io')(http);
 var port = process.argv[2] || 8888;
 
 const server = http.createServer((req, res) => {
     let saved = '';
     let filename = '';
     //console.log(req, res);
-    io.on('connection', function (socket) {
-        console.log('CONNECTED');
-        socket.join('sessionId');
-    });
     if (req.url === '/') {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.write(fs.readFileSync(__dirname + '/index.html'));
@@ -25,6 +20,7 @@ const server = http.createServer((req, res) => {
         const bb = busboy({ headers: req.headers });
         const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
         bar.start(100, 0);
+        io.emit('progress', { p: 0 });
         bb.on('file', (name, file, info) => {
             filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
             //process.stdout.write("Saving: " + filename + "\t");
@@ -46,6 +42,7 @@ const server = http.createServer((req, res) => {
                 //console.dir("Total written in: " + ((total / (1024 ^ 2)) / file_size) * 100);
                 value = Math.ceil((((total / (1024 ^ 2)) / file_size) * 100))
                 bar.update(value);
+                io.emit('progress', { p: value });
                 /* this is a temporary solution, find a way get the full file size
                 then calculate the percentage and post that to the progress bar on 
                 the client side also make it elegant*/
@@ -55,10 +52,10 @@ const server = http.createServer((req, res) => {
         });
         bb.on('close', () => {
             bar.update(100);
+            io.emit('progress', { p: 100 });
             bar.stop();
-            //console.log('Saved: ', saved);
-            //res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            //res.end(`<h3>Upload success:</h3> ${saved}`);
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(`<h3>Upload success:</h3> ${saved}`);
         });
         req.pipe(bb);
     } else if (req.url === '/folder') {
@@ -91,4 +88,12 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, () => {
     console.log('Server listening on http://localhost:' + port);
+});
+
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+    socket.emit('welcome', { message: 'Welcome!', id: socket.id });
+
+    socket.on('i am client', console.log);
 });

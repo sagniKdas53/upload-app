@@ -19,14 +19,12 @@
             padding: 0.5em;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.3/build/cjs/index.min.js"></script>
-    <script>
-        var socket = io('http://localhost');
-        socket.on('connect', function(){
-        socket.on('event', function(data){});
-        socket.on('disconnect', function(){});
-      });
-    </script>
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+        integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+        crossorigin="anonymous"></script>
+    <script src='/socket.io/socket.io.js'></script>
+
+</head>
 
 <body>
     <div class="pure-g">
@@ -54,7 +52,7 @@
                 <h3>File to upload:</h3>
                 <ul id="listing"></ul>
             </div>
-
+            <ul id='messages'></ul>
         </div>
     </div>
     <script defer>
@@ -77,6 +75,30 @@
         }, false);
 
         const pbar = document.getElementById(upstat);
+    </script>
+    <script defer>
+        var socket = io();
+
+        socket.on('welcome', function (data) {
+            addMessage(data.message);
+
+            // Respond with a message including this clients' id sent from the server
+            socket.emit('i am client', { data: 'foo!', id: data.id });
+        });
+        socket.on('time', function (data) {
+            addMessage(data.time);
+        });
+        socket.on('error', console.error.bind(console));
+        socket.on('message', console.log.bind(console));
+
+        function addMessage(message) {
+            var text = document.createTextNode(message),
+                el = document.createElement('li'),
+                messages = document.getElementById('messages');
+
+            el.appendChild(text);
+            messages.appendChild(el);
+        }
     </script>
 </body>
 
