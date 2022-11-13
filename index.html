@@ -79,6 +79,7 @@
         }, false);
 
         function sockSetup() {
+            console.log("Sock setup"); 
             var socket = io();
             socket.on('init', function (data) {
                 console.log(data.message);
