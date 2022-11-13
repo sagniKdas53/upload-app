@@ -75,25 +75,26 @@ var server = http.createServer((req, res) => {
         var io = require('socket.io')(server);
         io.on('connection', function (socket) {
             socket.emit('init', { message: "Connected", id: socket.id });
-            socket.on('acknowledge', console.log);  
+
+            //socket.on('acknowledge', console.log);
             // remove this as this causes the progress bar to break
         });
         io.emit('progress', { progress: 0 });
         bb.on('file', (name, file, info) => {
-            filename = decodeURIComponent(escape(info.filename));
+            filename = decodeURIComponent(escape(info.filename));   //This is depricated but it's the easiet way to do it
+            //console.log(filename);
             dirpath = __dirname + "/recieved/"
             dirpath += filename.slice(0, filename.lastIndexOf('/'));
-            console.log(dirpath);
+            //console.log(dirpath);
             if (!fs.existsSync(dirpath)) {
                 fs.mkdirSync(dirpath, { recursive: true });
             }
             //process.stdout.write("Saving: " + filename.slice(filename.lastIndexOf('/') + 1,) + '\t');
             saved += "<br>" + filename
-            const saveTo = path.join(__dirname + "/recieved", filename);
-            console.log(saveTo);
+            const saveTo = fs.createWriteStream(path.join(__dirname + "/recieved", filename));
             let save = file.pipe(saveTo); // the file is getting piped into fs to be saved
             var hold = 0;
-            var value = 0; 
+            var value = 0;
             var progress = setInterval(function () {
                 var wb = save.bytesWritten;
                 if (hold != wb) {
