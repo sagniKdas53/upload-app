@@ -3,15 +3,16 @@ const busboy = require('busboy');
 const fs = require('fs');
 const path = require('path');
 const cliProgress = require('cli-progress');
-const colors = require('ansi-colors');
 var port = process.argv[2] || 8888;
+var index = fs.readFileSync(__dirname + '/index.html')
+var response = fs.readFileSync(__dirname + '/response.html')
 
 var server = http.createServer((req, res) => {
     let saved = '';
     let filename = '';
     if (req.url === '/') {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.write(fs.readFileSync(__dirname + '/index.html'));
+        res.write(index);
         res.end();
     } else if (req.url === '/files') {
         file_size = req.headers['content-length'] / (1024 ^ 2);
@@ -65,7 +66,8 @@ var server = http.createServer((req, res) => {
             io.emit('progress', { progress: 100 });
             bar.stop();
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(`<h3>Upload success:</h3> ${saved}`);
+            res.write(response + saved + '</div></div></body></html>');
+            res.end();
         });
         req.pipe(bb);
     } else if (req.url === '/folder') {
@@ -124,7 +126,8 @@ var server = http.createServer((req, res) => {
             io.emit('progress', { progress: 100 });
             bar.stop();
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(`<h3>Upload success:</h3> ${saved}`);
+            res.write(response + saved + '</div></div></body></html>');
+            res.end();
         });
         req.pipe(bb);
     }
