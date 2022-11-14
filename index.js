@@ -33,6 +33,9 @@ var server = http.createServer((req, res) => {
             //process.stdout.write("Saving: " + filename + "\t");
             saved += "<br>" + filename
             const saveTo = fs.createWriteStream(path.join(__dirname + "/recieved", filename));
+            if (!fs.existsSync(__dirname + "/recieved")) {
+                fs.mkdirSync(__dirname + "/recieved", { recursive: true });
+            }
             let save = file.pipe(saveTo); // the file is getting piped into fs to be saved
             var hold = 0;
             var value = 0;
