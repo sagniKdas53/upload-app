@@ -1,0 +1,3 @@
+docker run -dit --name my-apache-app -p 8080:80 -v "/home/sagnik/Projects/upload-server/recieved":/usr/local/apache2/htdocs/ httpd:2.4
+
+docker run --name upserv1 -p 8888:8888 -v "/home/sagnik/Projects/upload-server/recieved":"/home/node/app/recieved" -d purevert/upload-server

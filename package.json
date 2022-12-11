@@ -9,7 +9,6 @@
   "author": "Sagnik Das",
   "license": "ISC",
   "dependencies": {
-    "bulma": "^0.9.4",
     "busboy": "^1.6.0",
     "cli-progress": "^3.11.2",
     "fs": "^0.0.1-security",
