@@ -1,6 +1,6 @@
 # Upload server
 
-Very simple http-server to upload files and folders to the host
+Very simple http-server to upload and view files and folders to the host
 
 ## TODO
 
@@ -10,15 +10,10 @@ Very simple http-server to upload files and folders to the host
 - [x] Use a tiny css framework
 - [x] Can't upload big files, needs more testing
   - [x] It depends on the network and not the server
-- [ ] Add a way to browse the servers recieved directory
-  - [x] Express won't work, need a way to browse the files not just host them
-  - [ ] Maybe <https://www.npmjs.com/package/cloudcmd> can be used
-  - [ ] <https://github.com/serverwentdown/file-manager>
-  - [ ] <https://chonky.io/>
-  - [ ] <https://github.com/sumitchawla/file-browser>
-  - [ ] <https://chawlasumit.wordpress.com/2014/08/04/how-to-create-a-web-based-file-browser-using-nodejs-express-and-jquery-datatables/>
-  - [ ] <https://npm.io/search/keyword:file+explorer>
-  - [ ] <https://github.com/ianaya89/node-explorer>
-  - [ ] <https://github.com/marvinjude/xplora>
+- [x] Add a way to browse the servers recieved directory
+  - [x] httpd with docker did the job
+- [ ] Add the Apaxy theme to the build process
+  - [ ] [Apaxy git](https://github.com/oupala/apaxy)
 
 - [ ] Make a npm package so that i can install it on more platforms
+- [ ] Make a docker hub image and publish it
