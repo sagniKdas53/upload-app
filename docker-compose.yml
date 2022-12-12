@@ -4,14 +4,19 @@ version: '3'
 services:
   upload-server:
     image: purevert/upload-server
+    build: .
     ports:
       - '8888:8888'
     volumes:
       - "./recieved:/home/node/app/recieved"
-      
-  apache-server:
-    image: httpd:2.4
+
+  apache-apaxy-server:
+    image: apaxy
+    build:
+      context: ./apaxy-essentials/
+      args:
+        apaxyPath: ''
     ports:
-      - '8080:80'
+      - '8080:8080' #host:container
     volumes:
-      - "./recieved:/usr/local/apache2/htdocs/"
+      - './recieved/:/usr/local/apache2/htdocs/recieved'
