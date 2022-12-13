@@ -12,9 +12,9 @@ Very simple http-server to upload and view files and folders to the host
   - [x] It depends on the network and not the server
 - [x] Add a way to browse the servers recieved directory
   - [x] httpd with docker did the job
-- [ ] Add the Apaxy theme to the build process
+- [x] Add the Apaxy theme to the build process
   - [x] [Apaxy git](https://github.com/oupala/apaxy)
-  - [ ] Make a way to clone the files into the container directly and use only the needed files
+  - [x] Make a way to clone the files into the container directly and use only the needed files
 - [ ] Make a npm package so that i can install it on more platforms
 - [x] Make a docker hub image and publish it
 - [ ] Make a docker hub image for raspberry pi (on a git branch) and publish it

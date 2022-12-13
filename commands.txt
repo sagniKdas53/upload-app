@@ -1,3 +1,15 @@
 docker run -dit --name my-apache-app -p 8080:80 -v "/home/sagnik/Projects/upload-server/recieved":/usr/local/apache2/htdocs/ httpd:2.4
 
 docker run --name upserv1 -p 8888:8888 -v "/home/sagnik/Projects/upload-server/recieved":"/home/node/app/recieved" -d purevert/upload-server
+
+docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone https://github.com/alpine-docker/git.git
+
+Note: 
+If you set the --rm flag, Docker also removes the anonymous volumes associated with the container when the container is removed. This is similar to running docker rm -v my-container. Only volumes that are specified without a name are removed. For example, when running:
+
+docker run --rm -v /foo -v awesome:/bar busybox top
+
+the volume for /foo will be removed, but the volume for /bar will not. Volumes inherited via --volumes-from will be removed with the same logic: if the original volume was specified with a name it will not be removed.
+
+This is the one that will clone the repo:
+docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone https://github.com/oupala/apaxy.git

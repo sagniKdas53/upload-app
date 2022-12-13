@@ -4,18 +4,21 @@ version: '3'
 services:
   upload-server:
     image: purevert/upload-server
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.upserv
     ports:
       - '8888:8888'
     volumes:
       - "./recieved:/home/node/app/recieved"
 
   apache-apaxy-server:
-    image: apaxy
+    image: apaxy-git
     build:
-      context: ./apaxy-essentials/
+      context: .
       args:
         apaxyPath: ''
+      dockerfile: Dockerfile.apaxy
     ports:
       - '8080:8080' #host:container
     volumes:
