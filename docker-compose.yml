@@ -20,6 +20,6 @@ services:
         apaxyPath: ''
       dockerfile: Dockerfile.apaxy
     ports:
-      - '8080:8080' #host:container
+      - '8088:8080' #host:container
     volumes:
       - './recieved/:/usr/local/apache2/htdocs/recieved'
